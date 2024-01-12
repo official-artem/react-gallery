@@ -6,25 +6,24 @@ type PhotosState = {
   photos: PhotoResponse[],
   loading: boolean;
   error: string;
+  fullPhoto: PhotoResponse | null
 }
 const initialState: PhotosState = {
   photos: [],
   loading: false,
   error: '',
+  fullPhoto: null
 };
 
 const photosSlice = createSlice({
-  name: 'goods',
+  name: 'photos',
   initialState,
   reducers: {
-    // add: (state, action: PayloadAction<string>) => {
-    //   state.photos.push(action.payload);
-    // },
-    // take: (state, action: PayloadAction<string>) => {
-    //   state.photos.filter(good => good !== action.payload);
-    // },
-    clear: (state) => {
-      state.photos = []
+    getFullPhoto (state, action) {
+      state.fullPhoto = state.photos.find(photo => photo.id === action.payload) || null;
+    },
+    clearFullPhoto(state) {
+      state.fullPhoto = null;
     }
   },
   extraReducers: (builder) => {
@@ -34,7 +33,7 @@ const photosSlice = createSlice({
 
     builder.addCase(init.fulfilled, (state, action) => {
       state.photos = action.payload;
-      console.log(state.photos)
+      state.loading = false;
     })
 
     builder.addCase(init.rejected, (state) => {
@@ -47,7 +46,7 @@ const photosSlice = createSlice({
 // export const { add, take, clear } = goodsSlice.actions;
 export default photosSlice.reducer;
 
-
+export const { getFullPhoto, clearFullPhoto } = photosSlice.actions;
 export const init = createAsyncThunk('photos/fetch', () => {
   return getPhotos();
 })

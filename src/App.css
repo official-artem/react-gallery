@@ -7,6 +7,11 @@
   height: 10px;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .photo {
   object-position: center;
   height: clamp(100px, 20vw, 200px);
